@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body{
+    font-family: IRANYekan,sans-serif;
+}
+input{
+    font-family: IRANYekan,sans-serif;
+}
+.tether-element{
+    z-index: 99;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: none;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
