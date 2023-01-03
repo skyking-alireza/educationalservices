@@ -2,18 +2,8 @@ import {HiUserAdd, HiUser} from 'react-icons/hi';
 import {IoLogIn} from 'react-icons/io5';
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import {Btnlogin} from "./btnlogin";
-
 const Header = () => {
-    const {sessionuser, setSessionuser} = useState(null);
-    window.addEventListener('hashchange', function () {
-        console.log(111111111111111122222222222222);
-        // window.history.pushState({}, null, myOldUrl);
-    });
-    onstorage = (event) => {
-        console.log(localStorage.getItem('accesstoken'));
-        setSessionuser(localStorage.getItem('accesstoken'));
-    };
+    const [sessionuser, setSessionuser] = useState(window.localStorage.getItem('accesstoken') || null);
     return (
         <header className={'fixed justify-between w-full flex px-8 h-[60px] z-50 bg-transparent items-center'}>
             <div className={'flex items-center'}>
@@ -27,9 +17,23 @@ const Header = () => {
                 <a className={'px-2 block hover:text-white duration-300 '} href={'/#'}>دوره های آموزشی</a>
             </div>
             <div className={'flex'} id={'setbtnlogin'}>
+                {sessionuser ?
+                    <>
+                        <Link to={"/profile"}
+                              className={'px-6 flex py-2 text-white rounded mx-2 border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>پروفایل <HiUser
+                            className={'w-6 h-6'}/> </Link>
+                    </>
+
+                    : <>
+                        <Link to={"/signup"}
+                              className={'px-6 flex py-2 text-white rounded mx-2 border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>ثبت
+                            نام <HiUserAdd className={'w-6 h-6'}/> </Link>
+                        <Link to={'/login'}
+                              className={'px-6 flex py-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded mx-2 border-blue-600 border duration-500 bg-transparent '}> ورود<IoLogIn
+                            className={'w-6 h-6'}/></Link>
+                    </>}
             </div>
         </header>
     )
 }
-
 export default Header;

@@ -4,8 +4,6 @@ import Header from "./components/header";
 import Signup from "./pages/signup";
 import Login from "./pages/login";
 import Profile from "./pages/profile";
-import {Btnlogin} from "./components/btnlogin";
-
 function App() {
     return (
         <>

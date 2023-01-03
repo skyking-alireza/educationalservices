@@ -19,7 +19,7 @@ export default () => {
                         Alerts({text:'ورود موفقیت امیز بود', status: 'success'});
                         localStorage.setItem('accesstoken',e.data.access);
                         localStorage.setItem('refreshtoken',e.data.refresh);
-                        navigate("/profile");
+                        window.location.replace('/profile');
                     }
                 })
                 .catch((e) => {

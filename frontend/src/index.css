@@ -3,6 +3,7 @@
 @tailwind utilities;
 body{
     font-family: IRANYekan,sans-serif;
+    scroll-behavior: smooth;
 }
 input{
     font-family: IRANYekan,sans-serif;

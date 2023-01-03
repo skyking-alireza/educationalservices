@@ -1,14 +1,17 @@
 import {user_api} from "../api/auth";
-import {useNavigate} from "react-router-dom";
+import Userdata from "../components/userdata";
 
 export default () => {
-    const navigate = useNavigate();
-    user_api(`data_user/`, {headers: {'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`}})
-        // .then((e) => console.log(e))
+    async function setdata(){
+        const api_data = await user_api(`data_user/`, {headers: {'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`}})
+        return api_data
+    }
+
+
     const logout = () => {
         localStorage.removeItem('accesstoken');
         localStorage.removeItem('refreshtoken');
-        navigate('/');
+        window.location.replace('/');
     }
     return (
         <div className={'flex h-screen w-screen'}>
@@ -21,28 +24,12 @@ export default () => {
                     <li className={'py-3 cursor-pointer hover:text-gray-400 duration-300'}>پروفایل</li>
                     <li className={'py-3 cursor-pointer hover:text-gray-400 duration-300'}>پروفایل</li>
                     <li className={'py-3 cursor-pointer hover:text-gray-400 duration-300'}>پروفایل</li>
-                    <li className={'py-3 cursor-pointer hover:text-gray-400 duration-300'} onClick={logout}>خروج از حساب
-                        کاربری
+                    <li className={'py-3 cursor-pointer hover:text-gray-400 duration-300'} onClick={logout}>خروج
                     </li>
                 </ul>
             </div>
             <div className={'h-fit w-[60%] m-auto bg-black/60 text-white p-8  rounded-xl text-xl'}>
-                <div className={'text-2xl mt-0 pb-2'}>اطلاعات کاربری</div>
-                <div className={'inline-flex justify-between py-3'}>
-                    <p className={'px-5'}> نام و نام خانوادگی : علیرضا صابری </p>
-                    <p className={'px-5'}> نام پدر : منصور صابری </p>
-                    <p className={'px-5'}> تاریخ تولد : 01 / 15 / 1381 </p>
-                </div>
-                <div className={'inline-flex justify-between py-3'}>
-                    <p className={'px-5'}> نام و نام خانوادگی : علیرضا صابری </p>
-                    <p className={'px-5'}> نام پدر : منصور صابری </p>
-                    <p className={'px-5'}> تاریخ تولد : 01 / 15 / 1381 </p>
-                </div>
-                <div className={'inline-flex justify-between py-3'}>
-                    <p className={'px-5'}> نام و نام خانوادگی : علیرضا صابری </p>
-                    <p className={'px-5'}> نام پدر : منصور صابری </p>
-                    <p className={'px-5'}> تاریخ تولد : 01 / 15 / 1381 </p>
-                </div>
+                <Userdata data={setdata()} />
             </div>
         </div>
     )
