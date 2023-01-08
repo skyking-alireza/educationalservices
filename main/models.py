@@ -26,6 +26,8 @@ class user(AbstractUser):
     candidate = models.BooleanField(default=0)
     typemember = models.BooleanField(default=0)
     validate = models.BooleanField(default=0)
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 class detailsuser(models.Model):
     duser = models.ForeignKey(user , on_delete=models.CASCADE)
