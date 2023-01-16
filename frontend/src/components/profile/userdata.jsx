@@ -10,7 +10,6 @@ export default ({data}) => {
             setUserbirthday(new Intl.DateTimeFormat('fa').format(new Date(data[0].birthday)))
         }
     }, [data])
-    console.log(userdata)
     return (
         <>
             <div className={'text-2xl mt-0 pb-2'}>اطلاعات کاربری</div>
