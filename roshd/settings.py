@@ -24,15 +24,17 @@ SECRET_KEY = 'django-insecure-5qeu2(qako1j!$)y#wo8sc2$on6u%qfgpc#y&y$gsh_s766e^2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'main.user'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
   'http://localhost:3000',
+  'http://127.0.0.1:3000',
 )
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -72,6 +74,7 @@ INSTALLED_APPS = [
     'main',
     'course',
     'tinymce',
+    'blog',
     'rest_framework_simplejwt'
 ]
 REST_FRAMEWORK = {

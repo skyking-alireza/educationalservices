@@ -47,6 +47,7 @@ export default ({info, submit, unsubmit, status}) => {
                             }).format(new Date(info.endtime))}</p>
                             <p className={'text-sm '}>تعداد شرکت کنندگان
                                 : {new Intl.NumberFormat('fa').format(info.participant.length)}</p>
+
                             <button onClick={() => submit(info.id)}
                                     className={'bg-green-700 border-2 duration-300 border-green-700 hover:text-green-700 hover:bg-transparent  rounded-md text-sm p-3 my-2'}>شرکت
                                 در انتخابات

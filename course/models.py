@@ -10,7 +10,7 @@ class courses(models.Model):
     rate = models.IntegerField()
     description = HTMLField()
     price = models.IntegerField()
-    image = models.FileField(upload_to='frontend/src/images/courses')
+    image = models.FileField(upload_to='frontend/public/images/courses')
 class courses_and_students(models.Model):
     curse = models.ForeignKey(courses,on_delete=models.CASCADE)
     students = models.ManyToManyField(user)

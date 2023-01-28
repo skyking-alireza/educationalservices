@@ -6,8 +6,6 @@ class seri_course(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = courses
-
-
 class seri_courses_and_students(serializers.ModelSerializer):
    class Meta:
        fields = '__all__'

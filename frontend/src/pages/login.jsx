@@ -3,7 +3,8 @@ import React from "react";
 import {user_api} from "../api/auth";
 import {Alerts} from "../components/alerts";
 import {useNavigate} from "react-router-dom";
-export default () => {
+import {parseJwt} from "../functions/parseJWT";
+export default ({setsesstion}) => {
     const navigate = useNavigate();
     const check_user = () => {
         let allinput = []
@@ -19,7 +20,11 @@ export default () => {
                         Alerts({text:'ورود موفقیت امیز بود', status: 'success'});
                         localStorage.setItem('accesstoken',e.data.access);
                         localStorage.setItem('refreshtoken',e.data.refresh);
-                        window.location.replace('/profile');
+                        setsesstion(e.data.access)
+                        parseJwt(e.data.access).admin ?
+                            navigate('/admin')
+                            :
+                            navigate('/profile')
                     }
                 })
                 .catch((e) => {

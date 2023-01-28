@@ -4,9 +4,7 @@ import DatePicker from 'react-datepicker2';
 import { useState} from "react";
 import {user_api} from "../api/auth";
 import {Alerts} from "../components/alerts";
-import {useNavigate} from "react-router-dom";
-export default () => {
-    const navigate = useNavigate();
+export default ({setsesstion}) => {
     const [birthday , setBirthday] = useState('');
     const [username , setUsername] = useState('');
     const [repeat_password , setRepeat_password] = useState('');
@@ -17,16 +15,12 @@ export default () => {
         for (const element of allinputform) {allinput.push(element.validity.valid);}
         if (allinput.every(v => v === true)) {
             const data_form = new FormData(document.getElementById('createform'));
-            user_api('user/',{data: data_form,method:"post"}).then(() => {navigate("/login")}).catch((e) => {
+            user_api('user/',{data: data_form,method:"post"}).then(() => {window.location.replace("/login")}).catch((e) => {
                 if (e.message === "timeout of 2000ms exceeded"){
                     Alerts({text : 'ارتباط با سرور برقرار نشد لطفا بعدا تلاش کنید' , status : 'danger'});
                 }else if (e.response.status === 400){
                     for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
                 }
-
-                // JSON.parse(e.response.data).forEach(function (value) {console.log(value)})
-                console.log(e)
-                console.log(e.response.data)
             });
         }else {
             Alerts({text : 'در فرم ثبت نام شما خطایی وجود دارد نسبت به رفع آن اقدام کنید و مجددا تلاش فرمایید' , status : 'danger'});
@@ -75,20 +69,22 @@ export default () => {
                                     <option value={5}>دکتری تخصصی</option>
                                 </optgroup>
                             </select>
-                            <select className={'rounded-md mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}>
+                            <select
+                                name={'field_of_Study'}
+                                className={'rounded-md mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}>
                                 <optgroup label={'رشته تحصیلی'}>
-                                    <option>برق صنعتی</option>
-                                    <option>تأسیسات الکتریکی</option>
-                                    <option>فناوری اطلاعات و ارتباطات</option>
-                                    <option>الکترونیک</option>
-                                    <option>نرم‌افزار کامپیوتر</option>
-                                    <option>ساختمان</option>
-                                    <option>نقشه برداری</option>
-                                    <option>معماری</option>
-                                    <option>حسابداری</option>
-                                    <option>تبلیغات و بازاریابی</option>
-                                    <option>صنایع فلزی - جوشکاری</option>
-                                    <option>طراحی صنعتی</option>
+                                    <option value={1} >برق صنعتی</option>
+                                    <option value={2} >تأسیسات الکتریکی</option>
+                                    <option value={3} >فناوری اطلاعات و ارتباطات</option>
+                                    <option value={4} >الکترونیک</option>
+                                    <option value={5} >نرم‌افزار کامپیوتر</option>
+                                    <option value={6} >ساختمان</option>
+                                    <option value={7} >نقشه برداری</option>
+                                    <option value={8} >معماری</option>
+                                    <option value={9} >حسابداری</option>
+                                    <option value={10} >تبلیغات و بازاریابی</option>
+                                    <option value={11} >صنایع فلزی - جوشکاری</option>
+                                    <option value={12} >طراحی صنعتی</option>
                                 </optgroup>
                             </select>
                             <label>
@@ -136,34 +132,34 @@ export default () => {
                             </label>
 
                             <label className={'inline-flex peer-checked/draft:text-sky-500 text-center mx-20'}>آیا عضو انجمن یا گروه دیگر در دانشگاه هستید ؟</label>
-                            <input name={'Otherassociation'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} type={'checkbox'}/>
+                            <input name={'otherassociation'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} type={'checkbox'}/>
                             <br/>
                             <label>
-                                <textarea required={true} id={'Descriptionotherassociation'} className={'rounded-md peer mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}  name={'Descriptionotherassociation'}  placeholder={'در چه عرصه هایی مایل به همکاری هستید ؟'} ></textarea>
-                                <ul className={"marker:text-sky-400 hidden peer-[#Descriptionotherassociation]:peer-invalid:block block text-red-700 list-disc text-sm space-y-2"}>
+                                <textarea required={true} id={'descriptionotherassociation'} className={'rounded-md peer mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}  name={'descriptionotherassociation'}  placeholder={'در چه عرصه هایی مایل به همکاری هستید ؟'} ></textarea>
+                                <ul className={"marker:text-sky-400 hidden peer-[#descriptionotherassociation]:peer-invalid:block block text-red-700 list-disc text-sm space-y-2"}>
                                     <li> * این فیلد اجباری می باشد</li>
                                 </ul>
                             </label>
                             <label>
-                                <textarea required={true} id={'Skill'} className={'rounded-md peer mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}  name={'Skill'}  placeholder={'مهارت های تخصصی مرتبط با رشته'} ></textarea>
-                                <ul className={"marker:text-sky-400 hidden peer-[#Skill]:peer-invalid:block block text-red-700 list-disc text-sm space-y-2"}>
+                                <textarea required={true} id={'skill'} className={'rounded-md peer mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}  name={'skill'}  placeholder={'مهارت های تخصصی مرتبط با رشته'} ></textarea>
+                                <ul className={"marker:text-sky-400 hidden peer-[#skill]:peer-invalid:block block text-red-700 list-disc text-sm space-y-2"}>
                                     <li> * این فیلد اجباری می باشد</li>
                                 </ul>
                             </label>
                             <label>
-                                <textarea required={true} id={'Proposal'} className={'rounded-md mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}  name={'Proposal'}  placeholder={'سایر پیشنهاد ها جهت فعالیت در انجمن'} ></textarea>
-                                <ul className={"marker:text-sky-400 hidden peer-[#Proposal]:peer-invalid:block block text-red-700 list-disc text-sm space-y-2"}>
+                                <textarea required={true} id={'proposal'} className={'rounded-md mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'}  name={'proposal'}  placeholder={'سایر پیشنهاد ها جهت فعالیت در انجمن'} ></textarea>
+                                <ul className={"marker:text-sky-400 hidden peer-[#proposal]:peer-invalid:block block text-red-700 list-disc text-sm space-y-2"}>
                                     <li> * این فیلد اجباری می باشد</li>
                                 </ul>
                             </label>
                             <label className={'inline-flex text-center mx-20'}>تمایل به شرکت در انتخابات به عنوان کاندیدای انتخابات انجمن علمی رشته مربوطه</label>
-                            <input className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} type={'checkbox'}/>
+                            <input name={'candidate'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} type={'checkbox'}/>
                             <br/>
                             <label className={'inline-flex text-center mx-20'}>نوع عضویت</label>
                             <br/>
-                            <input id={'enable'} name={'jointype'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} value={1} type={'radio'}/>
+                            <input id={'enable'} name={'typemember'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} value={1} type={'radio'}/>
                             <label htmlFor={'enable'}>فعال</label>
-                            <input checked={true} id={'disable'} name={'jointype'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} value={0} type={'radio'}/>
+                            <input checked={true} id={'disable'} name={'typemember'} className={'accent-blue-600 cursor-pointer w-5 h-5 rounded-xl duration-300'} value={0} type={'radio'}/>
                             <label htmlFor={'disable'}>عادی</label>
                             <input required={true} placeholder={'رمز عبور'} type={'password'} onChange={(e) => setPassword(e.target.value)} className={'rounded-md mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'} name={'password'} />
                             <input required={true} placeholder={'تکرار رمز عبور'} type={'password'} onChange={(e) => setRepeat_password(e.target.value)} className={'rounded-md mx-20 bg-gray-600 my-2 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600 p-3'} name={'repeat_password'} />
