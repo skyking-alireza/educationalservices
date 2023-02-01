@@ -39,7 +39,7 @@ export default () => {
                     <Link to={'#'} className={'hover:pr-6 duration-300'}> گالری عکس </Link>
                 </div>
                 <div className={'w-[19%] grid pr-4  border-r-2 border-neutral-400 '}>
-                    <img className={'h-[96px] text-center mx-auto'} src={set_images('frontend/public/images/logo/logo.png')} alt={'/#'}/>
+                    <img className={'h-[96px] max-w-fit text-center mx-auto'} src={set_images('frontend/public/images/logo/logo.png')} alt={'/#'}/>
                     <p className={'text-center'}>دانشگاه باهنر شیراز</p>
                 </div>
             </div>

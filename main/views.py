@@ -11,13 +11,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from main.models import user, election, votes
 from main.permissions import IsAdmin
 from main.serializer import user_serializer, seri_election, seri_votes, user_update_serializer, seri_create_election, \
-    seri_test
+    seri_test , staff_user_serializer , students_serializer, masters_serializer , able_master_serializer
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         token['admin'] = user.is_superuser
+        token['master'] = user.is_staff
         return token
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -25,13 +26,23 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class user_view(ListCreateAPIView):
     queryset = user.objects.all()
     serializer_class = user_serializer
-
+class students_view(ListAPIView):
+    queryset = user.objects.filter(is_staff=False)
+    serializer_class = students_serializer
+class masters_view(ListAPIView):
+    queryset = user.objects.filter(is_staff=True,is_superuser=False)
+    serializer_class = masters_serializer
+class staff_user_view(ListCreateAPIView):
+    queryset = user.objects.all()
+    serializer_class = staff_user_serializer
 
 class update_user_view(UpdateAPIView):
     queryset = user
     serializer_class = user_update_serializer
-
-
+class able_master_view(UpdateAPIView):
+    queryset = user
+    serializer_class = able_master_serializer
+    permission_classes = [IsAdmin]
 class vote_view(ListCreateAPIView):
     queryset = votes.objects.all()
     serializer_class = seri_votes

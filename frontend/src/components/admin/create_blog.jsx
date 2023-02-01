@@ -12,11 +12,12 @@ export default ({data,del,category})=>{
     const editorRef = useRef(null);
     const editorRef2 = useRef(null);
     const editBlog = (info)=>{
-      console.log(info)
       setBlog(info)
       setCate([...info.category])
       document.getElementById('title').value = info.title
       editorRef.current.setContent(info.body)
+      document.getElementById('body').value = info.body
+      document.getElementById('description').value = info.description
       editorRef2.current.setContent(info.description)
     }
     const addcate = (id) => {
@@ -37,22 +38,28 @@ export default ({data,del,category})=>{
         let allinput = []
         let allinputform = document.forms["blog"].getElementsByTagName("input")
         for (const element of allinputform) {allinput.push(element.validity.valid);}
-        if (allinput.every(v => v === true)) {
-            const data_form = new FormData(document.getElementById('blog'));
-            data_form.append('category' , cate)
-            blog_api('blog',{data: data_form,method:"post"}).then((e) => {
-                Alerts({text:'عملیات موفقیت آمیز بود',status:'success'})
-            }).catch((e) => {
-                if (e.message === "timeout of 2000ms exceeded"){
-                    Alerts({text : 'ارتباط با سرور برقرار نشد لطفا بعدا تلاش کنید' , status : 'danger'});
-                }else if (e.response.status === 400){
-                    for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
-                }
-            });
-        }else {
-            Alerts({text : 'در فرم شما خطایی وجود دارد نسبت به رفع آن اقدام کنید و مجددا تلاش فرمایید'  , status : 'danger'});
+        let data_form = new FormData(document.getElementById('blog'));
+        data_form.append('category' , cate)
+        blog?
+              blog_api(`RUD_blog/${blog.id}`,{data: data_form,method:"PUT",headers: {'Authorization': `Bearer ${localStorage.accesstoken}`}}).then((e) => {
+                  Alerts({text:'عملیات موفقیت آمیز بود',status:'success'})
+              }).catch((e) => {
+                  for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
+              })
+          :
+          allinput.every(v => v === true)?
+              blog_api('blog',{data: data_form,method:"post"}).then((e) => {
+                  Alerts({text:'عملیات موفقیت آمیز بود',status:'success'})
+              }).catch((e) => {
+                  if (e.message === "timeout of 2000ms exceeded"){
+                      Alerts({text : 'ارتباط با سرور برقرار نشد لطفا بعدا تلاش کنید' , status : 'danger'});
+                  }else if (e.response.status === 400){
+                      for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
+                  }
+              })
+          :
+              Alerts({text : 'در فرم شما خطایی وجود دارد نسبت به رفع آن اقدام کنید و مجددا تلاش فرمایید'  , status : 'danger'});
 
-        };
     }
     const handleEditorChange = (e) => {
         document.getElementById('body').value = e.target.getContent()
@@ -64,7 +71,7 @@ export default ({data,del,category})=>{
         <>
             <div className={'text-2xl mt-0 pb-2'}>ساخت دوره جدید</div>
             <form name={'blog'} className={'py-5 flex flex-col '} id={'blog'}>
-                <div className={'max-h-[330px] h-[330px] overflow-y-scroll overflow-x-hidden'}>
+                <div className={'max-h-[430px] h-[430px] overflow-y-scroll overflow-x-hidden'}>
                 <label>
                         <input type={'text'} id={'title'} minLength={3} required={true}
                                className={'rounded-md invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 invalid:outline-none invalid:ring invalid:ring-red-600 valid:outline-none valid:ring valid:ring-green-600 focus:outline-none focus:ring focus:ring-blue-600  mx-20 bg-gray-600 my-2 peer  p-3'}

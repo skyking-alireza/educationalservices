@@ -1,12 +1,24 @@
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView , ListAPIView
 from rest_framework.response import Response
 from course.models import courses, courses_and_students
-from course.serializer import seri_course, seri_courses_and_students
-
+from .serializer import seri_course, seri_courses_and_students , seri_UD_course
+from .permissions import IsMaster , CheckMaster , JustMaster
+from blog.mixins import update_by_image
 class view_courses(ListCreateAPIView):
     queryset = courses.objects.all()
     serializer_class = seri_course
+    permission_classes = [IsMaster]
+class view_courses_by_master(ListAPIView):
+    serializer_class = seri_course
+    permission_classes = [JustMaster]
+    def get_queryset(self):
+        user = self.request.user
+        return courses.objects.filter(teacher=user)
+class view_RUD_courses(update_by_image,RetrieveUpdateDestroyAPIView):
+    queryset = courses
+    serializer_class = seri_course
+    permission_classes = [CheckMaster]
 class view_courses_and_students(ListCreateAPIView):
     queryset = courses_and_students.objects.all()
     serializer_class = seri_courses_and_students

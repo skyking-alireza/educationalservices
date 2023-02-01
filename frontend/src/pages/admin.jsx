@@ -8,14 +8,35 @@ import Create_election from "../components/admin/create_election";
 import Create_category_blog from "../components/admin/create_category_blog";
 import Create_blog from "../components/admin/create_blog";
 import All_election from "../components/admin/all_election";
+import Students from "../components/admin/students";
+import Masters from "../components/admin/masters";
 export default ({setsesstion})=>{
     const navigate = useNavigate();
     const [panel , setPanel] = useState(0)
     const [elections , setElections] = useState(false);
     const [category_blog , setCategory_blog] = useState(false);
+    const [students , setStudents] = useState(false);
+    const [masters , setMasters] = useState(false);
     const [blog , setBlog] = useState(false);
     const del_blog = (id)=>{
-      alert(id)
+      blog_api(`RUD_blog/${id}` , {method: "delete",headers: {'Authorization': `Bearer ${localStorage.accesstoken}`}}).then(()=>{
+        const el = blog.filter((e)=>{
+          return e.id !== id
+        })
+        setBlog([...el])
+      }).catch((e)=>{
+        for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
+      })
+
+    }
+    const able_master = (id,status)=>{
+      user_api(`able_master/${id}` , {method: "put",data : {is_active : !status} , headers: {'Authorization': `Bearer ${localStorage.accesstoken}`}}).then((e)=>{
+        masters.map((e)=>{ if (e.id === id){e.is_active = !status}return e})
+        setMasters([...masters])
+      }).catch((e)=>{
+        for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
+      })
+
     }
     const del_election =(id)=>{
       user_api(`RUD_election/${id}` , {method: "delete",headers: {'Authorization': `Bearer ${localStorage.accesstoken}`}}).then(()=>{
@@ -67,6 +88,24 @@ export default ({setsesstion})=>{
           })
         } )()
       }
+      if (panel === 5 && !students){
+        (async()=>{
+          await user_api('students/').then((e) =>{
+            setStudents(e.data)
+          }).catch((e) =>{
+            for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
+          })
+        } )()
+      }
+      if (panel === 6 && !masters){
+        (async()=>{
+          await user_api('masters/').then((e) =>{
+            setMasters(e.data)
+          }).catch((e) =>{
+            for (var value in e.response.data){Alerts({text:e.response.data[value],status:'danger'})}
+          })
+        } )()
+      }
     },[panel])
     const refreshtoken = () => {
         user_api('refresh/', {
@@ -112,7 +151,7 @@ export default ({setsesstion})=>{
         navigate('/')
     }
     return(
-        <section className={'h-full mx-auto md:flex justify-between bg-zinc-300 pt-[80px] pb-[80px]'}>
+        <section className={'bg-admin h-full mx-auto md:flex justify-between h-screen bg-cover pt-[80px] pb-[80px]'}>
             <div id={'setalert'} className={'absolute h-screen z-[999]'}>
             </div>
             <div className={'rounded-lg md:w-1/6 m-2 drop-shadow-lg bg-white h-fit'}>
@@ -128,12 +167,18 @@ export default ({setsesstion})=>{
                         <ul className={'hidden group-hover:block '}>
                             <li onClick={()=>{setPanel(3)}} className={'text-sm leading-6 text-black hover:text-cyan-600 translate-x-4'}>ساخت دسته بندی</li>
                             <li onClick={()=>{setPanel(4)}} className={'text-sm leading-6 text-black hover:text-cyan-600 translate-x-4'}>ایجاد نوشته</li>
-                            <li onClick={()=>{setPanel(6)}} className={'text-sm leading-6 text-black hover:text-cyan-600 translate-x-4'}>نوشته ها</li>
                         </ul>
                     </li>
+                    <li className={'cursor-pointer group hover:text-cyan-600 duration-300'}> مدیریت کاربران
+                        <ul className={'hidden group-hover:block '}>
+                            <li onClick={()=>{setPanel(5)}} className={'text-sm leading-6 text-black hover:text-cyan-600 translate-x-4'}>همه کاربران</li>
+                            <li onClick={()=>{setPanel(6)}} className={'text-sm leading-6 text-black hover:text-cyan-600 translate-x-4'}>اساتید</li>
+                        </ul>
+                    </li>
+                    <li onClick={()=>{logout()}} className={'cursor-pointer hover:text-cyan-600 duration-300'}>خروج</li>
                 </ul>
             </div>
-            <div className={'md:w-full m-2 drop-shadow-lg  rounded-lg md:w-4/5 bg-white h-fit'}>
+            <div className={'md:w-full m-2 drop-shadow-lg rounded-lg md:w-4/5 bg-white h-5/6'}>
                 {panel === 0 &&
                     <div className={'p-5'}>
                         <p>بازدید روزانه سایت :</p>
@@ -152,6 +197,8 @@ export default ({setsesstion})=>{
                 {panel === 4 &&
                     <Create_blog data={blog} del={del_blog} category={category_blog} />
                 }
+                {panel === 5 && <Students info={students} /> }
+                {panel === 6 && <Masters able={able_master} info={masters} /> }
             </div>
         </section>
     )

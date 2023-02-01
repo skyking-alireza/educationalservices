@@ -1,6 +1,7 @@
 import Listlesson from "../components/listlesson";
 
-export default () => {
+export default ({courses}) => {
+    console.log(courses);
     return (
         <div className={'flex-warp'}>
             <div id={'setalert'} className={'absolute h-screen z-[999]'}>
@@ -17,7 +18,7 @@ export default () => {
                 <h2>دوره ها</h2>
             </div>
             <div className={'px-6 bg-zinc-200 flex flex-wrap max-h-[440px] leading-10 justify-between'}>
-                <Listlesson title={'lesson'} />
+                {courses ? <Listlesson title={'lesson'} info={courses} /> : <p className={'mx-auto bg-yellow-500 text-white text-center'}>دوره ای جهت نمایش وجود ندارد</p> }
             </div>
         </div>
     )

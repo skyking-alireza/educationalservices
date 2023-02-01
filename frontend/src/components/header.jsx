@@ -3,7 +3,7 @@ import {IoLogIn} from 'react-icons/io5';
 import {Link} from "react-router-dom";
 import {set_images} from "../functions/images";
 import {parseJwt} from "../functions/parseJWT";
-import {FcManager} from 'react-icons/fc'
+import {FcManager,FcBusinessman} from 'react-icons/fc'
 import { useState} from "react";
 import {AiOutlineMenu , AiOutlineClose} from 'react-icons/ai'
 const Header = ({sessionuser}) => {
@@ -35,9 +35,16 @@ const Header = ({sessionuser}) => {
                                 className={'w-6 h-6'}/> </Link>
                         </>
                         :
+                        parseJwt(sessionuser).master ?
+                        <>
+                            <Link to={"/master"}
+                                  className={'hidden px-4 sm:px-6 sm:py-2 sm:mx-2 md:flex  text-white rounded  border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>صفحه استاد <FcBusinessman
+                                className={'w-6 h-6'}/> </Link>
+                        </>
+                        :
                         <>
                             <Link to={"/profile"}
-                                  className={'px-4 sm:px-6 sm:py-2 sm:mx-2 flex  text-white rounded  border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>پروفایل <HiUser
+                                  className={'hidden px-4 sm:px-6 sm:py-2 sm:mx-2 md:flex  text-white rounded  border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>پروفایل <HiUser
                                 className={'w-6 h-6'}/> </Link>
                         </>
                     : <>
@@ -51,7 +58,7 @@ const Header = ({sessionuser}) => {
             </div>
         </div>
             <div className={menu ?'fixed md:hidden mt-[60px] w-full z-[998]' : 'hidden'}>
-                <div className={'block  bg-white text-center'}>
+                <div className={'block  bg-white text-center  p-4'}>
                     <Link className={'py-2  block hover:text-gray-700 duration-300 '} to={'/'}>خانه</Link>
                     <Link className={'py-2  block hover:text-gray-700 duration-300 '} to={'/elections'}>انتخابات</Link>
                     <Link className={'py-2  block hover:text-gray-700 duration-300 '} to={'/result_election'}>نتیجه انتخابات</Link>
@@ -65,9 +72,16 @@ const Header = ({sessionuser}) => {
                                     className={'w-6 h-6'}/> </Link>
                             </>
                             :
+                            parseJwt(sessionuser).master ?
+                            <>
+                                <Link to={"/master"}
+                                      className={'px-6 my-2 mx-6 py-2  flex text-white rounded  border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>صفحه استاد <FcBusinessman
+                                    className={'w-6 h-6'}/> </Link>
+                            </>
+                            :
                             <>
                                 <Link to={"/profile"}
-                                      className={'px-6 my-2 mx-6 py-2 flex   text-white rounded  border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>پروفایل <HiUser
+                                      className={'px-6 my-2 mx-6 py-2  flex text-white rounded  border-blue-600 border duration-500 bg-blue-600 hover:text-blue-600 hover:bg-transparent '}>پروفایل <HiUser
                                     className={'w-6 h-6'}/> </Link>
                             </>
                         : <>

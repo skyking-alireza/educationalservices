@@ -4,16 +4,12 @@ import Show_election from "../show_election";
 import {parseJwt} from "../../functions/parseJWT";
 import {Alerts} from "../alerts";
 
-export default ({data}) => {
+export default ({data , el}) => {
     const [elections, setElections] = useState([])
     const [candidate, setCandidate] = useState(false)
     useEffect(() => {
-        (async () => {
-            await user_api('election/').then((e) => {
-                setElections(e.data)
-            })
-        })()
-    }, [])
+        el && setElections(el)
+    }, [el])
     const participant = (id) => {
         user_api('set_election/', {
             method: "POST",
